@@ -1,14 +1,23 @@
 [project]
-name = "clip"
+name = "o-clip-rigger"
 version = "0.1.0"
-description = "Add your description here"
+description = "Local image search with OpenCLIP and FAISS"
 readme = "README.md"
 requires-python = ">=3.13"
-dependencies = []
+dependencies = [
+    "faiss-cpu>=1.15.0",
+    "open-clip-torch>=3.3.0",
+    "pillow>=12.3.0",
+    "torch>=2.14.0",
+    "torchvision>=0.29.0",
+    "tqdm>=4.70.1",
+]
 
-[project.scripts]
-clip = "clip:main"
+[tool.uv.sources]
+torch = { index = "pytorch" }
+torchvision = { index = "pytorch" }
 
-[build-system]
-requires = ["uv_build>=0.12.13,<0.13.0"]
-build-backend = "uv_build"
+[[tool.uv.index]]
+name = "pytorch"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
