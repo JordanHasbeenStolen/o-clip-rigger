@@ -1,0 +1,31 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+.pytest_cache/
+
+# Virtual environments
+.venv/
+o-clip-env/
+venv/
+
+
+# Data and indices (private/generated)
+data/
+faiss_index.bin
+metadata.pkl
+*.npy
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# uv
+.uv/
