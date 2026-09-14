@@ -6,6 +6,8 @@ Powered by OpenCLIP embeddings and FAISS vector search.
 
 <!-- screenshot placeholder: replace with actual preview -->
 <!-- ![demo](docs/screenshot.png) -->
+<img width="846" height="376" alt="image" src="https://github.com/user-attachments/assets/df9c9dd8-f22a-47bd-89ab-c87f96bc0c2d" />
+
 
 ## What it does
 
