@@ -35,6 +35,6 @@ e.g. "cat on the sofa", "sunset over mountains", "document with signature".
 - [x] CLI prototype with FAISS
 - [x] FastAPI backend
 - [ ] Telegram bot frontend
-- [ ] Streamlit UI with image previews
+- [x] Streamlit UI with image previews
 - [ ] Docker packaging
 - [ ] Qdrant migration
