@@ -33,7 +33,7 @@ e.g. "cat on the sofa", "sunset over mountains", "document with signature".
 ## Roadmap
 
 - [x] CLI prototype with FAISS
-- [ ] FastAPI backend
+- [x] FastAPI backend
 - [ ] Telegram bot frontend
 - [ ] Streamlit UI with image previews
 - [ ] Docker packaging
