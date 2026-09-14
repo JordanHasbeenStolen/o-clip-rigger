@@ -59,3 +59,6 @@ def get_path(idx: int) -> str | None:
     if 0 <= idx < len(_metadata):
         return _metadata[idx]
     return None
+
+def warmup():
+    _load()

@@ -1,3 +1,4 @@
+from contextlib import asynccontextmanager
 from pathlib import Path
 from typing import List
 
@@ -5,9 +6,16 @@ from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field
 
-from core import search, total_vectors, get_path
+from core import search, total_vectors, get_path, warmup
 
-app = FastAPI(title="o-clip-rigger API")
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    warmup()
+    yield
+
+
+app = FastAPI(title="o-clip-rigger API", lifespan=lifespan)
 
 
 class SearchRequest(BaseModel):
