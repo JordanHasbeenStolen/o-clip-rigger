@@ -19,6 +19,9 @@ faiss_index.bin
 metadata.pkl
 *.npy
 
+# Secrets
+.env
+
 # IDE
 .vscode/
 .idea/

@@ -5,10 +5,13 @@ description = "Local image search with OpenCLIP and FAISS"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
+    "aiogram>=3.31.0",
     "faiss-cpu>=1.15.0",
     "fastapi>=0.141.1",
+    "httpx>=0.28.1",
     "open-clip-torch>=3.3.0",
     "pillow>=12.3.0",
+    "python-dotenv>=1.2.3",
     "requests>=2.34.2",
     "streamlit>=1.63.0",
     "torch>=2.14.0",
