@@ -15,7 +15,8 @@ API_URL = os.environ.get("API_URL", "http://localhost:8000")
 ALLOWED_USER_IDS = {
     int(x) for x in os.environ.get("ALLOWED_USER_IDS", "").split(",") if x.strip()
 }
-TOP_K = 3
+MODEL = "siglip2"
+TOP_K = 1
 
 dp = Dispatcher()
 
@@ -30,8 +31,9 @@ async def on_start(message: Message):
         await message.answer("Not authorized.")
         return
     await message.answer(
-        "Send me a text query (e.g. cat on the sofa) — "
-        "I'll find matching photos in the collection."
+        "Hi! Send me a text query (e.g. cat on the sofa) and I'll search "
+        "the photo collection (using SigLIP2) and send you back the single "
+        "most likely match."
     )
 
 
@@ -43,7 +45,9 @@ async def on_search(message: Message):
     query = message.text.strip()
     async with httpx.AsyncClient(base_url=API_URL, timeout=30) as client:
         try:
-            resp = await client.post("/search", json={"query": query, "top_k": TOP_K})
+            resp = await client.post(
+                "/search", json={"query": query, "top_k": TOP_K, "model": MODEL}
+            )
             resp.raise_for_status()
         except httpx.ConnectError:
             await message.answer(f"API is unreachable. Is uvicorn running on {API_URL}?")
