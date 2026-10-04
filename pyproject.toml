@@ -12,6 +12,7 @@ dependencies = [
     "open-clip-torch>=3.3.0",
     "pillow>=12.3.0",
     "python-dotenv>=1.2.3",
+    "python-multipart>=0.0.32",
     "requests>=2.34.2",
     "streamlit>=1.63.0",
     "torch>=2.14.0",

@@ -1,4 +1,5 @@
 import pickle
+import sys
 import time
 from pathlib import Path
 
@@ -9,27 +10,34 @@ from PIL import Image
 from tqdm import tqdm
 import open_clip
 
+from core import SEARCH_MODELS
+
 # --- Config ---
-# DATA_DIR = Path("data") 
-DATA_DIR = Path("data/test") 
-INDEX_PATH = Path("faiss_index.bin")
-META_PATH = Path("metadata.pkl")
+MODEL = sys.argv[1] if len(sys.argv) > 1 else "openclip"
+# DATA_DIR = Path("data")
+DATA_DIR = Path("data/test")
 BATCH = 32
 EXTS = {".jpg", ".jpeg", ".png", ".bmp", ".webp", ".tiff", ".gif"}
 TEST_LIMIT = 20  # set to None for full run
 
+if MODEL not in SEARCH_MODELS:
+    raise SystemExit(f"Unknown model: {MODEL!r}, expected one of {list(SEARCH_MODELS)}")
+cfg = SEARCH_MODELS[MODEL]
+INDEX_PATH = cfg["index_path"]
+META_PATH = cfg["meta_path"]
+
 # --- Device ---
 device = "cuda" if torch.cuda.is_available() else "cpu"
-print(f"Device: {device}")
+print(f"Model: {MODEL} ({cfg['model_name']}, {cfg['pretrained']})  Device: {device}")
 
 # --- Model ---
 model, _, preprocess = open_clip.create_model_and_transforms(
-    "ViT-B-32", pretrained="laion2b_s34b_b79k"
+    cfg["model_name"], pretrained=cfg["pretrained"]
 )
 model = model.to(device).eval()
 
 # --- Collect paths ---
-paths = [p for p in DATA_DIR.rglob("*") if p.suffix.lower() in EXTS and p.is_file()]
+paths = sorted(p for p in DATA_DIR.rglob("*") if p.suffix.lower() in EXTS and p.is_file())
 print(f"Found {len(paths)} images")
 if not paths:
     raise SystemExit("No images in data/")

@@ -1,53 +1,24 @@
 """Accuracy check: OpenCLIP vs SigLIP2 on the real Clinny surface-tagging dataset.
 
 Not a captioning test - just zero-shot top-1 matching against the fixed class
-vocabulary, using data/test_tags images and the ground truth from
-data/3v  ИИ модуль - тесты фотографий.md.
+vocabulary, using data/test_tags images and the labels in
+data/test_tags/ground_truth.json (private, gitignored - built from
+data/3v  ИИ модуль - тесты фотографий.md).
 
 Run: uv run python test_siglip2.py
 """
 
+import json
 from pathlib import Path
 
 import torch
 import open_clip
 from PIL import Image
 
+from core import TAGS as CLASSES
+
 DATA_DIR = Path("data/test_tags")
-
-# key -> short English phrase fed to the text encoder
-CLASSES = {
-    "natural_stone": "natural stone surface",
-    "ceramic_tile": "ceramic tile",
-    "laminate": "laminate flooring",
-    "lacquered_wood": "lacquered wood",
-    "oiled_wood": "oiled or waxed wood",
-    "vinyl_pvc": "vinyl or linoleum floor",
-    "stainless_steel": "stainless steel",
-    "chrome_sanitary": "chrome faucet or shower fitting",
-    "glass_mirror": "glass or mirror",
-    "plastic": "plastic surface",
-    "fabric_upholstery": "fabric upholstery",
-    "leather": "leather",
-}
-
-# filename (in data/test_tags) -> ground-truth class key, from the table
-GROUND_TRUTH = {
-    "photo_2026-09-30_20-09-019123.jpg": "natural_stone",      # 01
-    "photo_2026-09-30_20-09-09123.jpg": "ceramic_tile",        # 02
-    "a38hqeo6wqb36khyivla4pgd9frj0wrg 1.jpeg": "laminate",     # 03
-    "Pasted image 20260930203235.png": "lacquered_wood",       # 04
-    "photo_2026-09-30_20-09-0812.jpg": "oiled_wood",           # 05
-    "Pasted image 20260930203417.png": "vinyl_pvc",            # 06
-    "photo_2026-09-30_20-09-083 2.jpg": "stainless_steel",     # 07
-    "photo_2026-09-30_20-09-08.jpg": "chrome_sanitary",        # 08
-    "photo_2026-09-30_20-09-08 (2).jpg": "glass_mirror",       # 09
-    "photo_2026-09-30_20-09-081.jpg": "plastic",                # 10
-    "photo_2026-09-30_20-09-017.jpg": "fabric_upholstery",     # 11
-    "photo_2026-09-30_20-09-07 (2).jpg": "leather",            # 12
-    "Pasted image 20260930205009.png": "ceramic_tile",          # 13 (tile-that-looks-like-stone)
-    "Pasted image 20260930204933.png": "vinyl_pvc",             # 15 (vinyl-that-looks-like-wood)
-}
+GROUND_TRUTH = json.loads((DATA_DIR / "ground_truth.json").read_text())
 
 
 def run(model_name: str, pretrained: str):

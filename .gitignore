@@ -13,14 +13,18 @@ o-clip-env/
 venv/
 
 
-# Data and indices (private/generated)
+# Data and indices (private/generated) - covers per-model files too,
+# e.g. faiss_index_siglip2.bin, metadata_siglip2.pkl
 data/
-faiss_index.bin
-metadata.pkl
+faiss_index*.bin
+metadata*.pkl
 *.npy
 
 # Secrets
 .env
+
+# Personal/local notes, never shared
+CLAUDE.local.md
 
 # IDE
 .vscode/
