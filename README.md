@@ -13,21 +13,26 @@ Powered by OpenCLIP embeddings and FAISS vector search.
 
 Indexes a local folder of images and enables search by text —
 e.g. "cat on the sofa", "sunset over mountains", "document with signature".
+Can also take a single uploaded photo and suggest tags for it from a fixed
+vocabulary.
 
 ## How it works
 
-1. Each image is encoded into a 512-dim vector with OpenCLIP (ViT-B-32).
-2. Vectors are stored in a FAISS index for fast cosine similarity search.
-3. A text query is encoded with the same model and matched against the index.
+1. Each image is encoded into a vector with OpenCLIP (ViT-B-32) or SigLIP2 (ViT-B-16).
+2. Vectors are stored in a FAISS index for fast cosine similarity search - a
+   separate index per model, since their embeddings aren't comparable.
+3. A text query is encoded with the same model and matched against its index.
+4. Tagging matches an uploaded photo against a fixed vocabulary of candidate
+   tags (not free-form captioning), with per-model calibrated confidence scores.
 
 ## Stack
 
-- OpenCLIP ViT-B-32 (`laion2b_s34b_b79k` weights), evaluating SigLIP2 as a selectable alternative
-- FAISS (CPU)
+- OpenCLIP (ViT-B-32) and SigLIP2 (ViT-B-16), selectable per request
+- FAISS (CPU) — separate index per model
 - PyTorch (CPU)
-- FastAPI — backend API
-- Telegram bot (aiogram) — alternative interface, access restricted to an allowlist of Telegram user IDs
-- Streamlit — web UI
+- FastAPI — backend API (`/search`, `/tag`, `/image`)
+- Telegram bot (aiogram) — text search, allowlisted by Telegram user ID
+- Streamlit — web UI with model/task selection and photo upload
 - uv for dependency management
 
 ## Roadmap
@@ -36,7 +41,11 @@ e.g. "cat on the sofa", "sunset over mountains", "document with signature".
 - [x] FastAPI backend
 - [x] Telegram bot frontend (raw, user-allowlisted)
 - [x] Streamlit UI with image previews
-- [ ] Selectable model (OpenCLIP vs SigLIP2) in bot/UI
-- [ ] Zero-shot image tagging (vocabulary-based, no captioning)
+- [x] Selectable model (OpenCLIP vs SigLIP2) for search and tagging
+- [x] Zero-shot image tagging (vocabulary-based, no captioning)
+- [ ] Low-confidence cutoff ("not found" instead of a weak top-1 guess)
+- [ ] Model/task selection as buttons in the Telegram bot (currently text-only)
+- [ ] Index the full photo collection (currently a small test subset)
 - [ ] Docker packaging
 - [ ] Qdrant migration
+- [ ] Postgres + pgvector, Redis, Alembic (longer-term infra ideas)
