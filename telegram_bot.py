@@ -12,13 +12,23 @@ load_dotenv()
 
 BOT_TOKEN = os.environ["TELEGRAM_BOT_TOKEN"]
 API_URL = os.environ.get("API_URL", "http://localhost:8000")
+ALLOWED_USER_IDS = {
+    int(x) for x in os.environ.get("ALLOWED_USER_IDS", "").split(",") if x.strip()
+}
 TOP_K = 3
 
 dp = Dispatcher()
 
 
+def is_allowed(user_id: int) -> bool:
+    return user_id in ALLOWED_USER_IDS
+
+
 @dp.message(CommandStart())
 async def on_start(message: Message):
+    if not is_allowed(message.from_user.id):
+        await message.answer("Not authorized.")
+        return
     await message.answer(
         "Send me a text query (e.g. cat on the sofa) — "
         "I'll find matching photos in the collection."
@@ -27,6 +37,9 @@ async def on_start(message: Message):
 
 @dp.message(F.text)
 async def on_search(message: Message):
+    if not is_allowed(message.from_user.id):
+        await message.answer("Not authorized.")
+        return
     query = message.text.strip()
     async with httpx.AsyncClient(base_url=API_URL, timeout=30) as client:
         try:
@@ -57,6 +70,8 @@ async def on_search(message: Message):
 
 async def main():
     logging.basicConfig(level=logging.INFO)
+    if not ALLOWED_USER_IDS:
+        logging.warning("ALLOWED_USER_IDS is empty — the bot will reject everyone.")
     bot = Bot(BOT_TOKEN)
     await dp.start_polling(bot)
 

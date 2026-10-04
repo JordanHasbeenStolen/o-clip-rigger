@@ -22,19 +22,21 @@ e.g. "cat on the sofa", "sunset over mountains", "document with signature".
 
 ## Stack
 
-- OpenCLIP ViT-B-32 (`laion2b_s34b_b79k` weights)
+- OpenCLIP ViT-B-32 (`laion2b_s34b_b79k` weights), evaluating SigLIP2 as a selectable alternative
 - FAISS (CPU)
 - PyTorch (CPU)
 - FastAPI — backend API
-- Telegram bot — alternative interface (planned)
-- Streamlit — web UI (planned)
+- Telegram bot (aiogram) — alternative interface, access restricted to an allowlist of Telegram user IDs
+- Streamlit — web UI
 - uv for dependency management
 
 ## Roadmap
 
 - [x] CLI prototype with FAISS
 - [x] FastAPI backend
-- [ ] Telegram bot frontend
+- [x] Telegram bot frontend (raw, user-allowlisted)
 - [x] Streamlit UI with image previews
+- [ ] Selectable model (OpenCLIP vs SigLIP2) in bot/UI
+- [ ] Zero-shot image tagging (vocabulary-based, no captioning)
 - [ ] Docker packaging
 - [ ] Qdrant migration
