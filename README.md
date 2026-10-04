@@ -1,8 +1,8 @@
 # o-clip-rigger
 
-Search personal photo collections with natural language queries —
-from terminal, Telegram bot, or web UI.
-Powered by OpenCLIP embeddings and FAISS vector search.
+Search and tag personal photo collections with natural language queries —
+from terminal, Telegram bot, or web UI (Streamlit).
+Powered by OpenCLIP and SigLIP2 embeddings with FAISS vector search.
 
 <!-- screenshot placeholder: replace with actual preview -->
 <!-- ![demo](docs/screenshot.png) -->
